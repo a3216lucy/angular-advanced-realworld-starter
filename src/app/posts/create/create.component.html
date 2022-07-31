@@ -11,6 +11,9 @@
               formControlName="title"
             />
           </fieldset>
+          <ul *ngIf="post.controls.title.dirty && post.controls.title.errors">
+            <li *ngIf="post.controls.title.errors['required']">請輸入標題</li>
+          </ul>
           <fieldset class="form-group">
             <textarea
               class="form-control"
@@ -36,6 +39,14 @@
               (keyup.enter)="addTag(tag.value); tag.value = ''"
               (keydown.enter)="$event.preventDefault()"
             />
+            <ul *ngIf="post.controls.body.dirty && post.controls.body.errors">
+              <li *ngIf="post.controls.body.errors['required']">請輸入內文</li>
+              <li *ngIf="post.controls.body.errors['minlength']">
+                內文至少
+                {{ post.controls.body.errors["minlength"].requiredLength }}
+                個字
+              </li>
+            </ul>
             <div
               class="tag-list"
               *ngFor="
@@ -49,7 +60,11 @@
               >
             </div>
           </fieldset>
-          <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
+          <button
+            type="submit"
+            class="btn btn-lg btn-primary pull-xs-right"
+            [disabled]="post.invalid"
+          >
             Create Post
           </button>
         </form>
