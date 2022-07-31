@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PostService } from 'src/app/post.service';
 
 @Component({
   selector: 'app-create',
@@ -19,7 +21,11 @@ export class CreateComponent {
       this.fb.control('CSS'),
     ]),
   });
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private postService: PostService,
+    private router: Router
+  ) {}
 
   addTag(tag: string) {
     this.post.controls.tags.push(this.fb.control(tag));
@@ -35,5 +41,16 @@ export class CreateComponent {
   createPost() {
     // this.post.patchValue(this.post);
     console.log(this.post.value);
+
+    const articles = {
+      title: this.post.value.title || '',
+      description: this.post.value.description || '',
+      body: this.post.value.body || '',
+      tagList: <Array<string>>(this.post.value.tags || []),
+    };
+
+    this.postService.createArticle(articles).subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 }

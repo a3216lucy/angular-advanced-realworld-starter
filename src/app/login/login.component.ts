@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((queryParamMap) => {
+      // queryParamMap 是抓查詢字串，也就是 ?後面的那些字串
+      // paramsMap 是抓路徑參數，也就是 / 後面的那些字串（舉例 :id）
       this.redirectUrl = queryParamMap.get('redirect') || '';
     });
   }
