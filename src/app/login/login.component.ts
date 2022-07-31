@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserLoginInfo } from '../interfaces/login-info';
 import { LoginService } from '../login.service';
 
@@ -9,7 +9,7 @@ import { LoginService } from '../login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   /**
    * 帳號 demo@miniasp.com
    * 密碼 123456
@@ -19,10 +19,19 @@ export class LoginComponent {
     password: '',
   };
 
+  redirectUrl = '';
+
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private loginService: LoginService // private fb: FormBuilder
   ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((queryParamMap) => {
+      this.redirectUrl = queryParamMap.get('redirect') || '';
+    });
+  }
 
   login() {
     this.loginService.login(this.user).subscribe({
@@ -31,7 +40,7 @@ export class LoginComponent {
       next: (res) => {
         localStorage.setItem('token', res.user.token);
         // this.router.navigate(['/']);
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl(this.redirectUrl ?? '/');
       },
       // 2. error
       error: (error: HttpErrorResponse) => {
