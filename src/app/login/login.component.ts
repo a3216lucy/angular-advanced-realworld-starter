@@ -19,7 +19,20 @@ export class LoginComponent {
     password: '',
   };
 
-  constructor(private router: Router, private loginService: LoginService) {}
+  // form = this.fb.group({
+  //   email: this.fb.control('', {
+  //     validators: [Validators.required, Validators.email],
+  //   }),
+  //   password: this.fb.control('', {
+  //     validators: [Validators.required, Validators.minLength(4)],
+  //   }),
+  // });
+
+  constructor(
+    private router: Router,
+    private loginService: LoginService
+  ) // private fb: FormBuilder
+  {}
 
   login() {
     this.loginService.login(this.user).subscribe({
